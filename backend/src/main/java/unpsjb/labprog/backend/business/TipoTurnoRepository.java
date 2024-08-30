@@ -19,6 +19,7 @@ public interface TipoTurnoRepository extends CrudRepository<TipoTurno, Integer>,
     "WHERE op = :operario AND (:fecha BETWEEN ht.fechaTurnoDesde AND COALESCE(ht.fechaTurnoHasta, :fecha))")
     TipoTurno obtenerTurno(@Param("operario") Operario operario, @Param("fecha") Date fecha);
 
+    @SuppressWarnings("null")
     @Query(value = 
     "SELECT e " +
     "FROM TipoTurno e " +
