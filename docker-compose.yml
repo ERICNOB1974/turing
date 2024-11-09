@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: backend
+    volumes:
+      - ./backend:/app
+      - ../common/backend/m2:/root/.m2
+    working_dir: /app
+    command: sh run.sh
+    ports:
+      - 5005:5005
+      - 35729:35729
+      - 8080:8080
+    environment:
+      - MAVEN_OPTS=-Duser.home=/root  # Asegura que Maven tenga el directorio correcto
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: frontend
+    working_dir: /home/node/cli
+    command: ng serve --host=0.0.0.0 --port=3200  # Asegúrate de que el puerto coincida
+    restart: always
+    ports:
+      - "3200:3200"
+    stdin_open: true
+    tty: true
+    volumes:
+      - ./frontend:/home/node
