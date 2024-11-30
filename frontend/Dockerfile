@@ -11,6 +11,7 @@ RUN apk update && apk add --no-cache bash && apk add --no-cache sudo
 # Instala los paquetes de dependencias
 RUN npm install -g typescript
 RUN npm install -g @angular/cli
+RUN npm install
 
 # Establece el directorio de trabajo
 WORKDIR /home/node
