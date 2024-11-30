@@ -8,7 +8,7 @@ export class Constante {
     static readonly LENTO = 2000;
     static readonly NORMAL = 1000;
     static readonly RAPIDO = 500;
-    static readonly ANSIEDAD = 200;
+    static readonly ANSIEDAD = 100;
     static readonly AUTOMATICO = 0;
 
 }

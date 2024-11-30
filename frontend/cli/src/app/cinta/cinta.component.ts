@@ -40,7 +40,7 @@ export class CintaComponent {
     { nombre: 'Normal', valor: Constante.NORMAL },
     { nombre: 'Rápido', valor: Constante.RAPIDO },
     { nombre: 'Ansiedad', valor: Constante.ANSIEDAD },
-    { nombre: 'Automático', valor: Constante.AUTOMATICO },
+    { nombre: 'Turbo ansiedad', valor: Constante.AUTOMATICO },
   ];
   velocidadActual = Constante.NORMAL;
 
