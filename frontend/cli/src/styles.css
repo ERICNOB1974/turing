@@ -1,3 +1,14 @@
 /* You can add global styles to this file, and also import other style files */
 @import 'bootstrap/dist/css/bootstrap.min.css';
 @import "font-awesome/css/font-awesome.css";
+
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%; /* Altura completa de la ventana */
+    width: 100%;
+    text-align: center; /* Centrar el texto */
+    background-color: #000000; /* Asegúrate de que el fondo sea negro */
+    color: #ffffff;
+}

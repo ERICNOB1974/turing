@@ -1,0 +1,272 @@
+# Caracter Actual,Estado Inicial,Movimiento Cabezal,Escritura,Siguiente Estado
+
+#R
+Δ,q0,R,Δ,q1
+1,q0,R,1,q1
+0,q0,R,0,q1
+
+#->(si es un espacio) #
+Δ,q1,R,#,q2
+
+#R0
+Δ,q2,R,0,q3
+0,q2,R,0,q3
+1,q2,R,0,q3
+
+#R#
+Δ,q3,R,#,q4
+0,q3,R,#,q4
+1,q3,R,#,q4
+
+#R1
+Δ,q4,R,1,q5
+0,q4,R,1,q5
+1,q4,R,1,q5
+
+#R#
+Δ,q5,L,#,q6
+0,q5,R,#,q6
+1,q5,R,#,q6
+
+#L sub espacio
+0,q6,L,0,q6
+1,q6,L,1,q6
+#,q6,L,#,q6
+Δ,q6,Q,Δ,q7
+#Termina
+
+#->(si es un #)
+#,q1,R,#,q8
+
+#R sub espacio
+0,q8,R,0,q8
+1,q8,R,1,q8
+#,q8,R,#,q8
+Δ,q8,L,Δ,q9
+
+#L sub #
+Δ,q9,L,Δ,q9
+0,q9,L,0,q9
+1,q9,L,1,q9
+U,q9,L,U,q9
+C,q9,L,C,q9
+#,q9,L,#,q10
+
+#L sub #
+Δ,q10,L,Δ,q10
+0,q10,L,0,q10
+1,q10,L,1,q10
+U,q10,L,U,q10
+C,q10,L,C,q10
+#,q10,R,#,q11
+
+#R recorriendo U,C ->
+U,q11,R,U,q11
+C,q11,R,C,q11
+1,q11,R,U,q12
+0,q11,R,C,q13
+#,q11,L,#,q14
+
+# ->(si viene 1) R sub espacio 1
+0,q12,R,0,q12
+1,q12,R,1,q12
+#,q12,R,#,q12
+U,q12,R,U,q12
+C,q12,R,C,q12
+Δ,q12,R,1,q9
+
+# ->(si viene 0) R sub espacio 0
+0,q13,R,0,q13
+1,q13,R,1,q13
+#,q13,R,#,q13
+U,q13,R,U,q13
+C,q13,R,C,q13
+Δ,q13,R,0,q9
+
+# ->(si viene #) L sub #
+0,q14,L,0,q14
+1,q14,L,1,q14
+U,q14,L,U,q14
+C,q14,L,C,q14
+#,q14,L,#,q15
+
+#L recorriendo U,C ->
+U,q15,L,U,q15
+C,q15,L,C,q15
+1,q15,L,U,q16
+0,q15,L,C,q19
+#,q15,L,#,q22
+
+# -> (si viene 1) L sub espacio 1
+0,q16,L,0,q16
+1,q16,L,1,q16
+#,q16,L,#,q16
+U,q16,L,U,q16
+C,q16,L,C,q16
+Δ,q16,R,1,q17
+
+# R sub espacio
+0,q17,R,0,q17
+1,q17,R,1,q17
+#,q17,R,#,q17
+U,q17,R,U,q17
+C,q17,R,C,q17
+Δ,q17,L,Δ,q18
+
+#L sub #
+Δ,q18,L,Δ,q18
+0,q18,L,0,q18
+1,q18,L,1,q18
+U,q18,L,U,q18
+C,q18,L,C,q18
+#,q18,L,#,q14
+
+# -> (si viene 0) L sub espacio 0
+0,q19,L,0,q19
+1,q19,L,1,q19
+#,q19,L,#,q19
+U,q19,L,U,q19
+C,q19,L,C,q19
+Δ,q19,R,0,q20
+
+# R sub espacio
+0,q20,R,0,q20
+1,q20,R,1,q20
+#,q20,R,#,q20
+U,q20,R,U,q20
+C,q20,R,C,q20
+Δ,q20,L,Δ,q21
+
+#L sub #
+Δ,q21,L,Δ,q21
+0,q21,L,0,q21
+1,q21,L,1,q21
+U,q21,L,U,q21
+C,q21,L,C,q21
+#,q21,L,#,q14
+
+#L sub espacio
+0,q22,L,0,q22
+1,q22,L,1,q22
+#,q22,L,#,q22
+U,q22,L,U,q22
+C,q22,L,C,q22
+Δ,q22,R,Δ,q23
+
+#R sub #
+Δ,q23,R,Δ,q23
+0,q23,R,0,q23
+1,q23,R,1,q23
+U,q23,R,U,q23
+C,q23,R,C,q23
+#,q23,L,#,q24
+
+#L recorriendo 0 ->
+0,q24,L,0,q24
+1,q24,L,1,q25
+Δ,q24,R,Δ,q35
+
+#R sub #
+Δ,q25,R,Δ,q25
+0,q25,R,0,q25
+1,q25,R,1,q25
+U,q25,R,U,q25
+C,q25,R,C,q25
+#,q25,L,#,q26
+
+#L recorriendo 0 ->
+0,q26,L,0,q26
+1,q26,R,0,q27
+
+#R recorriendo 0,1 ->
+0,q27,R,1,q27
+1,q27,R,0,q27
+#,q27,R,#,q28
+
+# R sub espacio
+0,q28,R,0,q28
+1,q28,R,1,q28
+#,q28,R,#,q28
+U,q28,R,U,q28
+C,q28,R,C,q28
+Δ,q28,L,Δ,q29
+
+#L si viene 0 y 1
+0,q29,L,1,q22
+1,q29,L,0,q30
+
+#L si viene 0,1,# ->
+0,q30,L,1,q22
+1,q30,L,0,q30
+#,q30,R,#,q31
+
+# R sub espacio
+0,q31,R,0,q31
+1,q31,R,1,q31
+#,q31,R,#,q31
+U,q31,R,U,q31
+C,q31,R,C,q31
+Δ,q31,R,0,q32
+
+#L sub #
+Δ,q32,L,Δ,q32
+0,q32,L,0,q32
+1,q32,L,1,q32
+U,q32,L,U,q32
+C,q32,L,C,q32
+#,q32,R,#,q33
+
+# 1
+0,q33,R,1,q22
+
+# R si viene 0 y #
+0,q35,R,Δ,q35
+#,q35,R,#,q36
+
+#R sub espacio
+0,q36,R,0,q36
+1,q36,R,1,q36
+#,q36,R,#,q36
+U,q36,R,U,q36
+C,q36,R,C,q36
+Δ,q36,L,Δ,q37
+
+#L sub #
+Δ,q37,L,Δ,q37
+0,q37,L,0,q37
+1,q37,L,1,q37
+U,q37,L,U,q37
+C,q37,L,C,q37
+#,q37,L,#,q38
+
+#L sub #
+Δ,q38,L,Δ,q38
+0,q38,L,0,q38
+1,q38,L,1,q38
+U,q38,L,U,q38
+C,q38,L,C,q38
+#,q38,L,#,q39
+
+#L sub #
+Δ,q39,L,Δ,q39
+0,q39,L,0,q39
+1,q39,L,1,q39
+U,q39,L,U,q39
+C,q39,L,C,q39
+#,q39,R,#,q40
+
+#R recorriendo #,0 y 1
+#,q40,R,#,q40
+0,q40,R,0,q40
+1,q40,R,1,q40
+U,q40,R,1,q40
+C,q40,R,0,q40
+Δ,q40,L,#,q41
+
+#L sub espacio
+0,q41,L,0,q41
+1,q41,L,1,q41
+#,q41,L,#,q41
+U,q41,L,U,q41
+C,q41,L,C,q41
+Δ,q41,Q,Δ,q41

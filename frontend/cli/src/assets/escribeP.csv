@@ -1,0 +1,9 @@
+#hola, hola, hola, hola
+Δ,q0,R,Δ,q1
+a,q0,R,Δ,q1
+b,q0,R,Δ,q1
+c,q0,R,Δ,q1
+a,q1,R,p,q1
+b,q1,R,p,q1
+c,q1,R,a,q1
+Δ,q1,Q,Δ,q2
