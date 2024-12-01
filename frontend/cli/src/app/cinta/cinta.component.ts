@@ -183,10 +183,6 @@ private procesarTransiciones(rawData: string[]): any[] {
     const transicion = this.transiciones.find(
       t => t.caracterActual === caracterActual && t.estadoActual === this.estadoActual
     );
-    console.info("caracter",caracterActual);
-    console.info("estado",this.estadoActual);
-
-      console.info(transicion);
 
     if (!transicion) {
       this.palabraActual = "∞";
@@ -224,7 +220,6 @@ private procesarTransiciones(rawData: string[]): any[] {
   
     this.palabraActual = this.cinta[this.posicionCabezal];
 
-    console.log(this.posicionCabezal)
 
     this.verificarBordes();
   }
@@ -275,12 +270,10 @@ private procesarTransiciones(rawData: string[]): any[] {
   reiniciarCinta(): void {
     this.cintaService.borrarCinta(this.cinta).subscribe({
       next: () => {
-        console.log('Cinta reiniciada con Ã©xito.');
         this.cargarCinta().then(() => {
           this.actualizarCintaExpandida();
           this.posicionCabezal = 0;
           this.estadoActual = 'q0';
-          console.log('Datos recargados.');
         });
       },
       error: (err) => {

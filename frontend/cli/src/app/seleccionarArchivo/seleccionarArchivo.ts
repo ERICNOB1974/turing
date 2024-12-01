@@ -121,7 +121,7 @@ export class CsvUploaderComponent implements OnInit {
    * @param content Contenido del archivo CSV
    */
   private parseCsvToMatrix(content: string): void {
-    const lines = content.split('\n').filter(line => line.trim() && !line.startsWith('#'));
+    const lines = content.split('\n').filter(line => line.trim());
     this.fileMatrix = lines.map(line => {
       const [caracter, estadoInicial, movimientoCabezal, escritura, siguienteEstado] = line.split(',');
       return { caracter, estadoInicial, movimientoCabezal, escritura, siguienteEstado };
@@ -250,7 +250,7 @@ export class CsvUploaderComponent implements OnInit {
    * @param content Contenido del archivo CSV
    */
   private procesarArchivoCSV(content: string): void {
-    const lines = content.split('\n').filter(line => line.trim() && !line.startsWith('#'));
+    const lines = content.split('\n').filter(line => line.trim() );
     this.fileMatrix = [];
 
     for (let i = 0; i < lines.length; i += 5) {
