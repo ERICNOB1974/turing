@@ -9,7 +9,7 @@ import { DataPackage } from '../data-package';
 export class CintaService {
 
   private cintaUrl = 'rest/cinta';
-  
+
   constructor(
     private http: HttpClient
   ) { }
@@ -19,7 +19,10 @@ export class CintaService {
   }
 
   escribirCinta(cinta: string[]): Observable<DataPackage> {
-    return this.http.post<DataPackage>(`${this.cintaUrl}/escribir`,cinta);
+    return this.http.post<DataPackage>(`${this.cintaUrl}/escribir`, cinta);
+  }
+  borrarCinta(cinta: string[]): Observable<DataPackage> {
+    return this.http.post<DataPackage>(`${this.cintaUrl}/borrar`, cinta);
   }
 
 }

@@ -22,6 +22,10 @@
         <button (click)="detenerMaquinaBoton()" class="btn btn-lg btn-outline-warning" [disabled]="!maquinaCorriendo">
             Detener
         </button>
+
+        <button (click)="reiniciarCinta()" class="btn btn-lg btn-outline-warning" [disabled]="maquinaCorriendo">
+            Borrar cinta
+        </button>
     </div>
 
     <div class="cinta-container mb-4 w-100">

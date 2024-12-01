@@ -12,7 +12,7 @@ public class CintaRepository {
 
     public List<String> leerCinta() {
         try {
-            Path path = Paths.get(FILE_PATH); 
+            Path path = Paths.get(FILE_PATH);
             String contenido = Files.readString(path, StandardCharsets.UTF_8).trim();
             return Arrays.asList(contenido.split(","));
         } catch (Exception e) {
@@ -24,9 +24,9 @@ public class CintaRepository {
 
     public void escribirCinta(List<String> cinta) {
         try {
-            Path path = Paths.get(FILE_PATH); 
+            Path path = Paths.get(FILE_PATH);
             String contenido = String.join(",", cinta);
-            
+
             Files.writeString(path, contenido, StandardCharsets.UTF_8, StandardOpenOption.TRUNCATE_EXISTING);
             System.out.println("Archivo sobrescrito con éxito: " + contenido);
         } catch (Exception e) {
@@ -34,4 +34,20 @@ public class CintaRepository {
             e.printStackTrace();
         }
     }
+
+    public void borrarCinta(List<String> cinta) {
+        try {
+            Path path = Paths.get(FILE_PATH);
+            cinta.clear();
+            cinta.add("Δ");
+            cinta.add("Δ");
+            String contenido = String.join(",", cinta);
+            Files.writeString(path, contenido, StandardCharsets.UTF_8, StandardOpenOption.TRUNCATE_EXISTING);
+            System.out.println("Archivo sobrescrito con éxito: " + contenido);
+        } catch (Exception e) {
+            System.err.println("Error al escribir en el archivo: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
 }

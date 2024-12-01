@@ -18,5 +18,8 @@ public class CintaService {
     public void escribirCinta(List<String> cinta) {
         cintaRepository.escribirCinta(cinta);
     }
+    public void borrarCinta(List<String> cinta) {
+        cintaRepository.borrarCinta(cinta);
+    }
 
 }

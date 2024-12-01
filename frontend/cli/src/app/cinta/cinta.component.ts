@@ -1,10 +1,11 @@
 import { ChangeDetectorRef, Component, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { CommonModule, NgIf } from '@angular/common';
+import { CommonModule, Location, NgIf } from '@angular/common';
 import { Constante } from '../constantes';
 import { FormsModule } from '@angular/forms';
 import { CintaService } from './cinta.service';
 import { map } from 'rxjs';
+import { ActivatedRoute, Router } from '@angular/router';
 
 type Transition = {
   caracterActual: string;
@@ -18,7 +19,7 @@ type Transition = {
   selector: 'app-proyecto-detail',
   standalone: true,
   imports: [CommonModule, FormsModule],
-  templateUrl: './cinta.html' ,
+  templateUrl: './cinta.html',
   styleUrls: ['./cinta.css']
 })
 @Injectable({
@@ -44,13 +45,16 @@ export class CintaComponent {
   ];
   velocidadActual = Constante.NORMAL;
 
-  constructor(private http: HttpClient, private cdr: ChangeDetectorRef, private cintaService: CintaService) { }
+  constructor(private http: HttpClient,
+    private cdr: ChangeDetectorRef,
+    private cintaService: CintaService,
+    private router: ActivatedRoute) { }
 
   async ngOnInit() {
     try {
       await this.cargarCinta();
       this.palabraActual = this.cinta[0];
-      this.cargarTransiciones(Constante.archivo); 
+      this.cargarTransiciones(Constante.archivo);
       this.actualizarCintaExpandida();
     } catch (error) {
       console.error('Error durante la inicialización:', error);
@@ -68,7 +72,7 @@ export class CintaComponent {
   private cargarTransiciones(url: string): void {
     this.http.get(url, { responseType: 'text' }).subscribe({
       next: (data) => {
-        const lines = data.trim().split('\n').slice(1); 
+        const lines = data.trim().split('\n').slice(1);
         this.transiciones = lines.map(line => {
           const [caracterActual, estadoActual, movimiento, escritura, siguienteEstado] = line.split(',');
           return {
@@ -123,7 +127,7 @@ export class CintaComponent {
       clearInterval(this.intervalo);
       this.intervalo = setInterval(() => this.correr(), this.velocidadActual);
     }
-  }  
+  }
 
   private detenerMaquina(): void {
     clearInterval(this.intervalo);
@@ -134,12 +138,12 @@ export class CintaComponent {
 
   private correr(): void {
     const caracterActual = this.cinta[this.posicionCabezal];
-  
+
     const transicion = this.transiciones.find(
       t => t.caracterActual === caracterActual && t.estadoActual === this.estadoActual
     );
-  
-      console.info(transicion);
+
+    console.info(transicion);
 
     if (!transicion) {
       this.palabraActual = "∞";
@@ -148,11 +152,11 @@ export class CintaComponent {
       clearInterval(this.intervalo);
       return;
     }
-  
+
     this.cinta[this.posicionCabezal] = transicion.escritura;
     this.estadoActual = transicion.siguienteEstado;
     this.palabraActual = this.cinta[this.posicionCabezal];
-  
+
     //this.cdr.detectChanges();
 
     if (transicion.movimiento === Constante.DERECHA) {
@@ -167,21 +171,21 @@ export class CintaComponent {
       this.detenerMaquina();
       return;
     }
-  
+
     if (this.posicionCabezal < 0) {
       clearInterval(this.intervalo);
       return;
     } else if (this.posicionCabezal > this.cinta.length) {
       this.cinta.push('Δ');
     }
-  
+
     this.palabraActual = this.cinta[this.posicionCabezal];
 
     console.log(this.posicionCabezal)
 
     this.verificarBordes();
   }
-  
+
   private guardarCinta(): void {
     this.cintaService.escribirCinta(this.cinta).subscribe({
       next: (response) => {
@@ -193,7 +197,7 @@ export class CintaComponent {
       },
       error: (err) => console.error('Error en la solicitud al backend:', err)
     });
-  }  
+  }
 
   private verificarBordes(): void {
 
@@ -224,5 +228,22 @@ export class CintaComponent {
     clearInterval(this.intervalo);
     this.maquinaCorriendo = false;
   }
-  
+  reiniciarCinta(): void {
+    this.cintaService.borrarCinta(this.cinta).subscribe({
+      next: () => {
+        console.log('Cinta reiniciada con éxito.');
+        this.cargarCinta().then(() => {
+          this.actualizarCintaExpandida();
+          this.posicionCabezal = 0;
+          this.estadoActual = 'q0';
+          console.log('Datos recargados.');
+        });
+      },
+      error: (err) => {
+        console.error('Error al reiniciar la cinta:', err);
+      },
+    });
+  }
+
+
 }
