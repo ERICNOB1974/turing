@@ -1,11 +1,12 @@
 import { ChangeDetectorRef, Component, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { CommonModule, Location, NgIf } from '@angular/common';
+import { CommonModule, NgIf } from '@angular/common';
 import { Constante } from '../constantes';
 import { FormsModule } from '@angular/forms';
 import { CintaService } from './cinta.service';
 import { map } from 'rxjs';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
+import { TransicionesService } from '../seleccionarArchivo/transicion.service';
 
 type Transition = {
   caracterActual: string;
@@ -19,7 +20,7 @@ type Transition = {
   selector: 'app-proyecto-detail',
   standalone: true,
   imports: [CommonModule, FormsModule],
-  templateUrl: './cinta.html',
+  templateUrl: './cinta.html' ,
   styleUrls: ['./cinta.css']
 })
 @Injectable({
@@ -45,21 +46,39 @@ export class CintaComponent {
   ];
   velocidadActual = Constante.NORMAL;
 
-  constructor(private http: HttpClient,
-    private cdr: ChangeDetectorRef,
-    private cintaService: CintaService,
-    private router: ActivatedRoute) { }
+  constructor(private http: HttpClient, private cdr: ChangeDetectorRef, private cintaService: CintaService, private transicionService : TransicionesService  ) { }
 
   async ngOnInit() {
     try {
       await this.cargarCinta();
       this.palabraActual = this.cinta[0];
-      this.cargarTransiciones(Constante.archivo);
+      this.cargarTransiciones(); 
       this.actualizarCintaExpandida();
     } catch (error) {
       console.error('Error durante la inicialización:', error);
     }
   }
+/* 
+  async ngOnInit() {
+    try {
+      // Verifica si hay contenido del archivo pasado desde CsvUploaderComponent
+      const navigation = this.router.getCurrentNavigation();
+      const state = navigation?.extras.state as { fileContent?: string };
+  
+      if (state?.fileContent) {
+        this.cargarTransicionesDesdeContenido(state.fileContent);
+      } else {
+        // Si no hay contenido, usa el archivo definido en Constante
+        this.cargarTransiciones(Constante.archivo);
+      }
+  
+      await this.cargarCinta();
+      this.palabraActual = this.cinta[0];
+      this.actualizarCintaExpandida();
+    } catch (error) {
+      console.error('Error durante la inicialización:', error);
+    }
+  } */
 
   private actualizarCintaExpandida(): void {
     this.cintaExpandida = [
@@ -68,25 +87,47 @@ export class CintaComponent {
       ...Array(this.espaciosInfinitos).fill('Δ')
     ];
   }
+  private cargarTransiciones(): void {
+    this.transicionService.obtenerTransiciones().subscribe({
+        next: (response) => {
+            if (response.status === 200 && response.data) {
+              const rawData = response.data as string[];
+              this.transiciones = this.procesarTransiciones(rawData);
+            } else {
+                console.error('Respuesta inesperada del backend:', response);
+            }
+        },
+        error: (err) => console.error('Error cargando transiciones desde el backend:', err)
+    });
+}
 
-  private cargarTransiciones(url: string): void {
-    this.http.get(url, { responseType: 'text' }).subscribe({
-      next: (data) => {
-        const lines = data.trim().split('\n').slice(1);
-        this.transiciones = lines.map(line => {
-          const [caracterActual, estadoActual, movimiento, escritura, siguienteEstado] = line.split(',');
-          return {
-            caracterActual,
-            estadoActual,
-            movimiento: movimiento as 'L' | 'R' | 'Q',
-            escritura,
-            siguienteEstado
-          };
-        });
-      },
-      error: (err) => console.error('Error cargando transiciones:', err)
+/**
+ * Método para procesar las transiciones recibidas del backend
+ */
+private procesarTransiciones(rawData: string[]): any[] {
+  const transiciones = [];
+  const dataLimpia = rawData.flatMap(item => item.split('\n')); // Divide las cadenas con '\n' en líneas separadas
+
+  for (let i = 0; i < dataLimpia.length; i += 5) {
+    const caracterActual = dataLimpia[i];
+    const estadoActual = dataLimpia[i + 1];
+    const movimiento = dataLimpia[i + 2] as 'L' | 'R' | 'Q';
+    const escritura = dataLimpia[i + 3];
+    const siguienteEstado = dataLimpia[i + 4];
+
+    transiciones.push({
+      caracterActual,
+      estadoActual,
+      movimiento,
+      escritura,
+      siguienteEstado
     });
   }
+
+  console.info("Transiciones procesadas:", transiciones);
+  return transiciones;
+}
+
 
   private cargarCinta(): Promise<void> {
     return new Promise((resolve, reject) => {
@@ -127,7 +168,7 @@ export class CintaComponent {
       clearInterval(this.intervalo);
       this.intervalo = setInterval(() => this.correr(), this.velocidadActual);
     }
-  }
+  }  
 
   private detenerMaquina(): void {
     clearInterval(this.intervalo);
@@ -138,12 +179,14 @@ export class CintaComponent {
 
   private correr(): void {
     const caracterActual = this.cinta[this.posicionCabezal];
-
+  
     const transicion = this.transiciones.find(
       t => t.caracterActual === caracterActual && t.estadoActual === this.estadoActual
     );
+    console.info("caracter",caracterActual);
+    console.info("estado",this.estadoActual);
 
-    console.info(transicion);
+      console.info(transicion);
 
     if (!transicion) {
       this.palabraActual = "∞";
@@ -152,11 +195,11 @@ export class CintaComponent {
       clearInterval(this.intervalo);
       return;
     }
-
+  
     this.cinta[this.posicionCabezal] = transicion.escritura;
     this.estadoActual = transicion.siguienteEstado;
     this.palabraActual = this.cinta[this.posicionCabezal];
-
+  
     //this.cdr.detectChanges();
 
     if (transicion.movimiento === Constante.DERECHA) {
@@ -171,21 +214,21 @@ export class CintaComponent {
       this.detenerMaquina();
       return;
     }
-
+  
     if (this.posicionCabezal < 0) {
       clearInterval(this.intervalo);
       return;
     } else if (this.posicionCabezal > this.cinta.length) {
       this.cinta.push('Δ');
     }
-
+  
     this.palabraActual = this.cinta[this.posicionCabezal];
 
     console.log(this.posicionCabezal)
 
     this.verificarBordes();
   }
-
+  
   private guardarCinta(): void {
     this.cintaService.escribirCinta(this.cinta).subscribe({
       next: (response) => {
@@ -197,7 +240,7 @@ export class CintaComponent {
       },
       error: (err) => console.error('Error en la solicitud al backend:', err)
     });
-  }
+  }  
 
   private verificarBordes(): void {
 
@@ -228,10 +271,11 @@ export class CintaComponent {
     clearInterval(this.intervalo);
     this.maquinaCorriendo = false;
   }
+  
   reiniciarCinta(): void {
     this.cintaService.borrarCinta(this.cinta).subscribe({
       next: () => {
-        console.log('Cinta reiniciada con éxito.');
+        console.log('Cinta reiniciada con Ã©xito.');
         this.cargarCinta().then(() => {
           this.actualizarCintaExpandida();
           this.posicionCabezal = 0;
@@ -244,6 +288,4 @@ export class CintaComponent {
       },
     });
   }
-
-
 }
