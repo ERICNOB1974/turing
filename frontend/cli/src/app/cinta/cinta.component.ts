@@ -54,6 +54,7 @@ export class CintaComponent {
       this.palabraActual = this.cinta[0];
       this.cargarTransiciones(); 
       this.actualizarCintaExpandida();
+      this.ponerCabezalEnElEspacioDeMasALaDerecha();
     } catch (error) {
       console.error('Error durante la inicialización:', error);
     }
@@ -196,7 +197,7 @@ private procesarTransiciones(rawData: string[]): any[] {
     this.estadoActual = transicion.siguienteEstado;
     this.palabraActual = this.cinta[this.posicionCabezal];
   
-    //this.cdr.detectChanges();
+    this.cdr.detectChanges();
 
     if (transicion.movimiento === Constante.DERECHA) {
       this.posicionCabezal++;
@@ -211,17 +212,10 @@ private procesarTransiciones(rawData: string[]): any[] {
       return;
     }
   
-    if (this.posicionCabezal < 0) {
-      clearInterval(this.intervalo);
-      return;
-    } else if (this.posicionCabezal > this.cinta.length) {
-      this.cinta.push('Δ');
-    }
-  
+    this.verificarBordes();
+
     this.palabraActual = this.cinta[this.posicionCabezal];
 
-
-    this.verificarBordes();
   }
   
   private guardarCinta(): void {
@@ -270,10 +264,10 @@ private procesarTransiciones(rawData: string[]): any[] {
   reiniciarCinta(): void {
     this.cintaService.borrarCinta(this.cinta).subscribe({
       next: () => {
+        this.posicionCabezal = 0;
+        this.estadoActual = 'q0';
         this.cargarCinta().then(() => {
           this.actualizarCintaExpandida();
-          this.posicionCabezal = 0;
-          this.estadoActual = 'q0';
         });
       },
       error: (err) => {
@@ -281,4 +275,25 @@ private procesarTransiciones(rawData: string[]): any[] {
       },
     });
   }
+
+  private ponerCabezalEnElEspacioDeMasALaDerecha(): void {
+    let cont = 0;
+    for (let i=0;i<this.cinta.length;i++){
+      if (this.cinta[i] === "Δ"){
+        cont++;
+      }
+    }
+    if (cont == this.cinta.length){
+      this.posicionCabezal = 0;
+      return; 
+    }
+    for (let i=0;i<this.cinta.length;i++){
+      if (this.cinta[i] === "Δ"){
+        this.posicionCabezal = i;
+      } else {
+        return;
+      }
+    }
+  }
+
 }
