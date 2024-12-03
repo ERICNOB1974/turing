@@ -11,7 +11,6 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 
 
-
 type Transition = {
   caracterActual: string;
   estadoActual: string;
@@ -35,7 +34,6 @@ type Transition = {
 })
 export class CintaComponent {
   palabraActual: string | null = null;
-  nuevaCinta: string[] = ['Δ', 'Δ'];
   cinta: string[] = [];
   cintaExpandida: string[] = [];
   posicionCabezal: number = 0;
@@ -44,10 +42,8 @@ export class CintaComponent {
   transicion: Transition | undefined;
   private intervalo: any;
   espaciosInfinitos = 3;
+
   maquinaCorriendo = false;
-  mensajeEspaciosEliminados: string = "";
-  celdaSeleccionada: number = 0;
-  nuevoCaracter: string = '';
   velocidades = [
     { nombre: 'Lento', valor: Constante.LENTO },
     { nombre: 'Normal', valor: Constante.NORMAL },
@@ -170,6 +166,7 @@ export class CintaComponent {
     this.intervalo = setInterval(() => this.correr(), this.velocidadActual);
   }
 
+
   private correr(): void {
     const caracterActual = this.cinta[this.posicionCabezal];
 
@@ -180,7 +177,9 @@ export class CintaComponent {
     }
     if (!this.transicion) {
       this.palabraActual = "∞";
-      console.log('No se encontró una transición válida, deteniendo la máquina.');
+      console.error(
+        `No se encontró una transición válida para estado: ${this.estadoActual}, caracter: ${caracterActual}`
+      );
       this.guardarCinta();
       clearInterval(this.intervalo);
       return;
@@ -194,16 +193,12 @@ export class CintaComponent {
       }
 
       this.palabraActual = this.cinta[this.posicionCabezal];
-      // Detener el intervalo actual y reiniciar desde 'iniciar'
-      //this.iniciar(); // Llama nuevamente a iniciar
       return;
     }
     this.cinta[this.posicionCabezal] = this.transicion.escritura;
 
     this.estadoActual = this.transicion.siguienteEstado;
-    //this.palabraActual = this.cinta[this.posicionCabezal];
 
-    //this.cdr.detectChanges();
 
     if (this.transicion.movimiento === Constante.DERECHA) {
       this.posicionCabezal++;
@@ -222,7 +217,6 @@ export class CintaComponent {
     this.palabraActual = this.cinta[this.posicionCabezal];
     if (this.escribe) {
       this.escribe = false;
-
     }
   }
 
@@ -239,10 +233,15 @@ export class CintaComponent {
 
     if (this.posicionCabezal >= this.cinta.length) {
       this.cinta.push('Δ');
+      /*  if (this.posicionCabezal = this.cinta.length) {
+         this.posicionCabezal++;
+       } */
+
     }
 
     if (this.cinta[0] !== 'Δ') {
       this.cinta.unshift('Δ');
+      // this.posicionCabezal++;
     }
     if (this.cinta[this.cinta.length - 1] !== 'Δ') {
       this.cinta.push('Δ');
@@ -262,12 +261,16 @@ export class CintaComponent {
 
   reiniciarCinta(): void {
     this.cintaService.borrarCinta(this.cinta).subscribe({
-      next: () => {
+      next: async () => {
         this.posicionCabezal = 0;
         this.estadoActual = 'q0';
-        this.cargarCinta().then(() => {
-          this.actualizarCintaExpandida();
-        });
+        this.palabraActual = this.cinta[this.posicionCabezal];
+        await this.cargarCinta();
+        this.palabraActual = this.cinta[0];
+        this.actualizarCintaExpandida();
+        this.ponerCabezalEnElEspacioDeMasALaDerecha();
+        this.escribe = false;
+
       },
       error: (err) => {
         console.error('Error al reiniciar la cinta:', err);
@@ -277,25 +280,22 @@ export class CintaComponent {
 
   private ponerCabezalEnElEspacioDeMasALaDerecha(): void {
     let cont = 0;
-    for (let i=0;i<this.cinta.length;i++){
-      if (this.cinta[i] === "Δ"){
+    for (let i = 0; i < this.cinta.length; i++) {
+      if (this.cinta[i] === "Δ") {
         cont++;
       }
     }
-    if (cont == this.cinta.length){
+    if (cont == this.cinta.length) {
       this.posicionCabezal = 0;
-      return; 
+      return;
     }
-    for (let i=0;i<this.cinta.length;i++){
-      if (this.cinta[i] === "Δ"){
+    for (let i = 0; i < this.cinta.length; i++) {
+      if (this.cinta[i] === "Δ") {
         this.posicionCabezal = i;
       } else {
         return;
       }
     }
   }
-
-
-
 
 }
