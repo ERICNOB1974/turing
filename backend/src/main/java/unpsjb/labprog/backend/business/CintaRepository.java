@@ -43,9 +43,7 @@ public class CintaRepository {
             cinta.add("Δ");
             String contenido = String.join(",", cinta);
             Files.writeString(path, contenido, StandardCharsets.UTF_8, StandardOpenOption.TRUNCATE_EXISTING);
-            System.out.println("Archivo sobrescrito con éxito: " + contenido);
         } catch (Exception e) {
-            System.err.println("Error al escribir en el archivo: " + e.getMessage());
             e.printStackTrace();
         }
     }
