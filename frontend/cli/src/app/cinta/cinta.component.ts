@@ -42,6 +42,8 @@ export class CintaComponent {
   transicion: Transition | undefined;
   private intervalo: any;
   espaciosInfinitos = 3;
+  isModalOpen = false;
+  nuevoValor = ''; 
 
   maquinaCorriendo = false;
   velocidades = [
@@ -296,6 +298,68 @@ export class CintaComponent {
         return;
       }
     }
+  }
+
+
+  openModal(): void {
+    this.isModalOpen = true;
+    this.nuevoValor = this.cinta[this.posicionCabezal]; // Pre-cargar el valor actual de la celda en el campo de texto
+  }
+
+  closeModal(): void {
+    this.isModalOpen = false;
+    this.guardarCinta();
+  }
+
+   // Agregar una celda "Δ" a la derecha de la posición del cabezal
+   addCelda(): void {
+    this.cinta.splice(this.posicionCabezal + 1, 0, 'Δ'); // Inserta 'Δ' en la posición derecha del cabezal
+    this.posicionCabezal++;
+    this.palabraActual = this.cinta[this.posicionCabezal];
+    this.nuevoValor = this.cinta[this.posicionCabezal]; 
+  }
+
+  // Eliminar la celda en la posición actual del cabezal
+  eliminarCelda(): void {
+    if (this.cinta.length > 1) { // Solo permite eliminar si hay más de una celda
+      this.cinta.splice(this.posicionCabezal, 1); // Elimina la celda en la posición del cabezal
+      // Si el cabezal no está en el último elemento, mueve el cabezal hacia la celda anterior
+      if (this.posicionCabezal > 0) {
+        this.posicionCabezal--;
+        this.palabraActual = this.cinta[this.posicionCabezal];
+        this.nuevoValor = this.cinta[this.posicionCabezal]; 
+      }
+    }
+  }
+
+  // Mover el cabezal a la izquierda
+  moverCabezalIzquierda(): void {
+    if (this.posicionCabezal > 0) {
+      this.posicionCabezal--;
+      this.palabraActual = this.cinta[this.posicionCabezal];
+      this.nuevoValor = this.cinta[this.posicionCabezal]; 
+    }
+  }
+
+  // Mover el cabezal a la derecha
+  moverCabezalDerecha(): void {
+    if (this.posicionCabezal < this.cinta.length - 1) {
+      this.posicionCabezal++;
+      this.palabraActual = this.cinta[this.posicionCabezal];
+      this.nuevoValor = this.cinta[this.posicionCabezal];
+
+    }
+  }
+
+  // Actualizar el contenido de la celda en la posición del cabezal
+  actualizarCelda(): void {
+    if(this.nuevoValor==''){
+      this.cinta[this.posicionCabezal] = 'Δ' 
+    }else{
+      this.cinta[this.posicionCabezal] = this.nuevoValor; // Actualiza el contenido de la celda
+    }
+    this.nuevoValor = this.cinta[this.posicionCabezal];
+    this.palabraActual = this.cinta[this.posicionCabezal];
   }
 
 }

@@ -104,7 +104,7 @@ export class CsvUploaderComponent implements OnInit {
       this.resetSelection();
       this.selectedFile = input.files[0];
       this.archivoSeleccionado = this.selectedFile.name;
-      this.fileName = this.selectedFile.name;
+
 
       const reader = new FileReader();
       reader.onload = () => {
@@ -165,6 +165,7 @@ export class CsvUploaderComponent implements OnInit {
    */
   useFile(): void {
     if (this.fileName) {
+      console.log("ENTRE ACA");
       this.transicionesService.actualizarRutaArchivo(this.fileName).subscribe({
         next: () => {
           alert(`Archivo "${this.fileName}" seleccionado exitosamente.`);
@@ -176,6 +177,8 @@ export class CsvUploaderComponent implements OnInit {
         },
       });
     } else if (this.selectedFile) {
+      console.log("ENTRE ACA BIEN");
+
     if (this.archivosDisponibles.includes(this.archivoSeleccionado)) {
       alert(`El archivo "${this.archivoSeleccionado}" ya ha sido cargado anteriormente.`);
     }else{
