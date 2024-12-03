@@ -2,7 +2,8 @@
 
     <div class="mb-4 d-flex align-items-center">
         <label for="velocidadSelector" class="form-label me-3 text-white">Velocidad:</label>
-        <select id="velocidadSelector" class="form-select" style="width: auto;" [(ngModel)]="velocidadActual" (change)="cambiarVelocidad()">
+        <select id="velocidadSelector" class="form-select" style="width: auto;" [(ngModel)]="velocidadActual"
+            (change)="cambiarVelocidad()">
             <option *ngFor="let velocidad of velocidades" [value]="velocidad.valor">
                 {{ velocidad.nombre }}
             </option>
@@ -10,11 +11,12 @@
     </div>
 
     <div class="d-flex mb-4">
-        <button (click)="iniciar()" class="btn btn-lg btn-outline-light me-2" [disabled]="maquinaCorriendo" [ngClass]="{'disabled': maquinaCorriendo}">
+        <button (click)="iniciar()" class="btn btn-lg btn-outline-light me-2" [disabled]="maquinaCorriendo"
+            [ngClass]="{'disabled': maquinaCorriendo}">
             <span *ngIf="maquinaCorriendo">Ejecutando...</span>
             <span *ngIf="!maquinaCorriendo">Iniciar</span>
         </button>
-        
+
         <button (click)="paso()" class="btn btn-lg btn-outline-light me-2" [disabled]="maquinaCorriendo">
             Paso
         </button>
@@ -26,6 +28,10 @@
         <button (click)="reiniciarCinta()" class="btn btn-lg btn-outline-warning" [disabled]="maquinaCorriendo">
             Borrar cinta
         </button>
+        <button mat-raised-button color="primary" (click)="openModal(modalInvitarAmigos)">
+            Cargar cinta </button>
+
+
     </div>
 
     <div class="cinta-container mb-4 w-100">
@@ -40,3 +46,20 @@
     <p class="fs-4 text-white">Cabezal en: <span class="text-white">{{ palabraActual }}</span></p>
 
 </div>
+
+<!-- cinta.html -->
+<ng-template #modalInvitarAmigos>
+    <div mat-dialog-content>
+      <div class="cinta-container">
+        <span *ngFor="let celda of nuevaCinta; let i = index" 
+              [ngClass]="getCeldaClass(i)"
+              (click)="seleccionarCelda(i)">
+          {{ celda }}<span *ngIf="i < cinta.length - 1">,</span>
+        </span>
+      </div>
+      <div>
+        <input [(ngModel)]="nuevoCaracter" placeholder="Nuevo carácter" />
+        <button (click)="agregarCelda()">Agregar Celda</button>
+      </div>
+    </div>
+  </ng-template>

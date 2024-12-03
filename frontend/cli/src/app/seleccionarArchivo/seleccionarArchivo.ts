@@ -27,7 +27,6 @@ import { CommonModule } from '@angular/common';
 
       <!-- Botones para visualizar o usar el archivo seleccionado -->
       <div *ngIf="fileName||archivoSeleccionado">
-        <button (click)="visualizeFile()">Visualizar</button>
         <button (click)="useFile()">Usar archivo</button>
       </div>
 
@@ -37,7 +36,7 @@ import { CommonModule } from '@angular/common';
         <ul>
           <li *ngFor="let archivo of archivosDisponibles">
             <span>{{ archivo }}</span>
-              <button (click)="seleccionarArchivoExistente(archivo, fileInput)">Seleccionar</button>
+              <button (click)="seleccionarArchivoExistente(archivo, fileInput)">Ver</button>
           </li>
         </ul>
       </div>
