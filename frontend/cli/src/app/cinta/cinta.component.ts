@@ -1,11 +1,9 @@
-import { ChangeDetectorRef, Component, HostListener, Injectable, TemplateRef, ViewChild } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { ChangeDetectorRef, Component, Injectable, TemplateRef, ViewChild } from '@angular/core';
 import { CommonModule, NgIf } from '@angular/common';
 import { Constante } from '../constantes';
 import { FormsModule } from '@angular/forms';
 import { CintaService } from './cinta.service';
 import { map } from 'rxjs';
-import { Router } from '@angular/router';
 import { TransicionesService } from '../seleccionarArchivo/transicion.service';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
@@ -70,6 +68,7 @@ export class CintaComponent {
       this.palabraActual = this.cinta[0];
       this.cargarTransiciones();
       this.actualizarCintaExpandida();
+      this.ponerCabezalEnElEspacioDeMasALaDerecha();
     } catch (error) {
       console.error('Error durante la inicialización:', error);
     }
@@ -264,10 +263,10 @@ export class CintaComponent {
   reiniciarCinta(): void {
     this.cintaService.borrarCinta(this.cinta).subscribe({
       next: () => {
+        this.posicionCabezal = 0;
+        this.estadoActual = 'q0';
         this.cargarCinta().then(() => {
           this.actualizarCintaExpandida();
-          this.posicionCabezal = 0;
-          this.estadoActual = 'q0';
         });
       },
       error: (err) => {
@@ -276,46 +275,23 @@ export class CintaComponent {
     });
   }
 
-
-
-
-
-
-  openModal(templateRef: TemplateRef<any>) {
-    this.dialog.open(templateRef);
-  }
-
-
-  // Maneja la navegación con las flechas
-  @HostListener('document:keydown', ['$event'])
-  handleKeyboardEvent(event: KeyboardEvent) {
-    if (event.key === 'ArrowRight') {
-      if (this.celdaSeleccionada < this.nuevaCinta.length - 1) {
-        this.celdaSeleccionada++;
-      }
-    } else if (event.key === 'ArrowLeft') {
-      if (this.celdaSeleccionada > 0) {
-        this.celdaSeleccionada--;
+  private ponerCabezalEnElEspacioDeMasALaDerecha(): void {
+    let cont = 0;
+    for (let i=0;i<this.cinta.length;i++){
+      if (this.cinta[i] === "Δ"){
+        cont++;
       }
     }
-  }
-
-
-  // Método para obtener la clase de la celda seleccionada
-  getCeldaClass(index: number): string {
-    return index === this.posicionCabezal ? 'celda selected' : 'celda';
-  }
-
-  seleccionarCelda(index: number) {
-    this.celdaSeleccionada = index;
-    this.nuevoCaracter = this.nuevaCinta[index]; // Cargar el carácter actual en el campo de entrada
-  }
-
-  // Agregar nueva celda
-  agregarCelda() {
-    if (this.nuevoCaracter) {
-      this.nuevaCinta.splice(this.posicionCabezal + 1, 0, this.nuevoCaracter);
-      this.nuevoCaracter = ''; // Limpiar el campo de entrada
+    if (cont == this.cinta.length){
+      this.posicionCabezal = 0;
+      return; 
+    }
+    for (let i=0;i<this.cinta.length;i++){
+      if (this.cinta[i] === "Δ"){
+        this.posicionCabezal = i;
+      } else {
+        return;
+      }
     }
   }
 

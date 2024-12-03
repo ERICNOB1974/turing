@@ -9,64 +9,66 @@ import { CommonModule } from '@angular/common';
   imports: [CommonModule],
   template: `
     <div class="csv-uploader">
-      <h1>Selecciona un archivo CSV</h1>
+  <h1>Sube tu archivo CSV</h1>
 
-      <!-- Sección para subir un nuevo archivo -->
-      <div>
-        <input 
-        #fileInput
-        type="file" 
-        accept=".csv" 
-        (change)="onFileSelected($event)" 
-        required
-      />
-      </div>
+  <!-- Sección para subir un nuevo archivo -->
+  <div class="file-upload">
+    <input 
+      #fileInput 
+      type="file" 
+      accept=".csv" 
+      (change)="onFileSelected($event)" 
+      required 
+    />
+    <label for="fileInput">Seleccionar archivo</label>
+  </div>
 
-      <!-- Mostrar el archivo actualmente seleccionado -->
-      <p *ngIf="fileName">Archivo seleccionado: {{ fileName }}</p>
+  <!-- Mostrar el archivo actualmente seleccionado -->
+  <p *ngIf="fileName" class="selected-file">📄 Archivo seleccionado: <strong>{{ fileName }}</strong></p>
 
-      <!-- Botones para visualizar o usar el archivo seleccionado -->
-      <div *ngIf="fileName||archivoSeleccionado">
-        <button (click)="useFile()">Usar archivo</button>
-      </div>
+  <!-- Botones para visualizar o usar el archivo seleccionado -->
+  <div *ngIf="fileName || archivoSeleccionado" class="action-buttons">
+    <button (click)="useFile()">📂 Usar archivo</button>
+  </div>
 
-      <!-- Sección para mostrar archivos disponibles -->
-      <div *ngIf="archivosDisponibles.length" class="archivos-disponibles">
-        <h2>Archivos disponibles</h2>
-        <ul>
-          <li *ngFor="let archivo of archivosDisponibles">
-            <span>{{ archivo }}</span>
-              <button (click)="seleccionarArchivoExistente(archivo, fileInput)">Ver</button>
-          </li>
-        </ul>
-      </div>
+  <!-- Sección para mostrar archivos disponibles -->
+  <div *ngIf="archivosDisponibles.length" class="available-files">
+    <h2>Archivos disponibles</h2>
+    <ul>
+      <li *ngFor="let archivo of archivosDisponibles">
+        <span>{{ archivo }}</span>
+        <button (click)="seleccionarArchivoExistente(archivo, fileInput)">Seleccionar</button>
+      </li>
+    </ul>
+  </div>
 
-      <div *ngIf="fileMatrix.length">
-        <h2>Matriz del archivo</h2>
-        <div class="scrollable-table">
-          <table>
-            <thead>
-              <tr>
-                <th># Caracter Actual</th>
-                <th>Estado Inicial</th>
-                <th>Movimiento Cabezal</th>
-                <th>Escritura</th>
-                <th>Siguiente Estado</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let row of fileMatrix">
-                <td>{{ row.caracter }}</td>
-                <td>{{ row.estadoInicial }}</td>
-                <td>{{ row.movimientoCabezal }}</td>
-                <td>{{ row.escritura }}</td>
-                <td>{{ row.siguienteEstado }}</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
+  <!-- Mostrar matriz del archivo -->
+  <div *ngIf="fileMatrix.length" class="file-matrix">
+    <h2>Matriz del archivo</h2>
+    <div class="scrollable-table">
+      <table>
+        <thead>
+          <tr>
+            <th># Caracter Actual</th>
+            <th>Estado Inicial</th>
+            <th>Movimiento Cabezal</th>
+            <th>Escritura</th>
+            <th>Siguiente Estado</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let row of fileMatrix">
+            <td>{{ row.caracter }}</td>
+            <td>{{ row.estadoInicial }}</td>
+            <td>{{ row.movimientoCabezal }}</td>
+            <td>{{ row.escritura }}</td>
+            <td>{{ row.siguienteEstado }}</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
+  </div>
+</div>
   `,
   styleUrls: ['./seleccionarArchivo.css'],
 })
@@ -102,6 +104,7 @@ export class CsvUploaderComponent implements OnInit {
       this.resetSelection();
       this.selectedFile = input.files[0];
       this.archivoSeleccionado = this.selectedFile.name;
+      this.fileName = this.selectedFile.name;
 
       const reader = new FileReader();
       reader.onload = () => {
@@ -265,4 +268,5 @@ export class CsvUploaderComponent implements OnInit {
       });
     }
   }
+
 }
