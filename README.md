@@ -83,20 +83,20 @@ Un comentario invalido es “#,hola”.
 # Máquina de Turing precargada: Fibonacci en números binarios.
 Una de las máquinas de Turing precargadas es la que genera la sucesión de Fibonacci en formato binario. Esta máquina comienza con una cinta vacía representada como "ΔΔ". En su primera ejecución, carga los dos primeros números de la sucesión, separados por caracteres numerales (#), quedando la cinta en el siguiente estado: "Δ#0#1#Δ".
 A partir de este punto, la máquina sigue un proceso iterativo para calcular los números siguientes de esta sucesión:
-Copiar valores:
+1. Copiar valores:
 Copia el último número en la derecha de la cinta y el anteúltimo en la izquierda.
-Verificar condición inicial:
+2. Verificar condición inicial:
 Si el número de la izquierda es 0, la máquina arregla la cinta y finaliza la ejecución para prepararse para la próxima ejecución.
 Si el número de la izquierda no es 0, continúa al siguiente paso.
-Resta y suma binaria:
+3. Resta y suma binaria:
 Resta 1 al número de la izquierda.
 Luego, se mueve hasta el número copiado a la derecha y le suma 1.
-Iteración:
+4. Iteración:
 Repite los pasos anteriores hasta que el número de la izquierda sea 0.
-Ajustar la cinta:
+5. Ajustar la cinta:
 Limpia cualquier contenido innecesario en la cinta.
 Añade los separadores faltantes (#).
 Pone espacios (Δ) en lugar de los ceros que quedaron en el número copiado a la izquierda.
-Finalización:
+6. Finalización:
 La máquina finaliza dejando el cabezal en el espacio del lado izquierdo, más cercano a la cadena, preparado para la siguiente ejecución.
 Este proceso se puede repetir indefinidamente, generando siempre el próximo número de la sucesión de Fibonacci al sumar los dos últimos números en binario.
