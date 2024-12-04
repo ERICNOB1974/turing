@@ -33,7 +33,7 @@ public class CintaPresenter {
     @RequestMapping(value = "/borrar", method = RequestMethod.POST)
     public ResponseEntity<Object> borrarCinta(@RequestBody List<String> cinta) {
         cintaService.borrarCinta(cinta);
-        return Response.ok("Archivo borrado con exito");
+        return Response.ok("Cinta borrada con exito");
     }
 
 }

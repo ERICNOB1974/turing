@@ -31,7 +31,6 @@ export class TransicionesService {
     return this.http.get<DataPackage>(`${this.baseUrl}/archivos`);
   }
 
-
   /**
    * Método para obtener las transiciones del backend
    */

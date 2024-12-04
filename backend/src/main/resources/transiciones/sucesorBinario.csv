@@ -1,0 +1,43 @@
+# Caracter Actual,Estado Inicial,Movimiento Cabezal,Escritura,Siguiente Estado
+
+#R
+Δ,q0,R,Δ,q1
+1,q0,R,1,q1
+0,q0,R,0,q1
+
+# R sub espacio
+0,q1,R,0,q1
+1,q1,R,1,q1
+Δ,q1,L,Δ,q2
+
+#L si viene 0 y 1
+0,q2,L,1,q8 
+1,q2,L,0,q3
+
+#L si viene 0,1,# ->
+0,q3,L,1,q8 
+1,q3,L,0,q3
+Δ,q3,R,Δ,q4
+
+# R sub espacio
+0,q4,R,0,q4
+1,q4,R,1,q4
+Δ,q4,R,0,q5
+
+#L
+Δ,q5,L,Δ,q6
+1,q5,L,1,q6
+0,q5,L,0,q6
+
+#L sub #
+0,q6,L,0,q6
+1,q6,L,1,q6
+Δ,q6,R,Δ,q7
+
+# 1
+0,q7,L,1,q8
+
+#L sub espacio
+0,q8,L,0,q8
+1,q8,L,1,q8
+Δ,q8,Q,Δ,q8

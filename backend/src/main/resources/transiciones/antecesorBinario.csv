@@ -1,0 +1,30 @@
+# Caracter Actual,Estado Inicial,Movimiento Cabezal,Escritura,Siguiente Estado
+
+#R
+Δ,q0,R,Δ,q1
+1,q0,R,1,q1
+0,q0,R,0,q1
+
+# R sub espacio
+0,q1,R,0,q1
+1,q1,R,1,q1
+Δ,q1,L,Δ,q2
+
+#L recorriendo 0 ->
+0,q2,L,0,q2
+1,q2,R,0,q3
+
+#R recorriendo 0,1 ->
+0,q3,R,1,q3
+1,q3,R,0,q3
+Δ,q3,L,Δ,q4
+
+#L
+Δ,q4,L,Δ,q5
+1,q4,L,1,q5
+0,q4,L,0,q5
+
+#L sub espacio
+0,q5,L,0,q5
+1,q5,L,1,q5
+Δ,q5,Q,Δ,q5

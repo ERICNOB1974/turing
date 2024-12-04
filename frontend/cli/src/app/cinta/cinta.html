@@ -118,6 +118,16 @@
             margin-top: 1rem;
             font-size: 1.5rem;
         }
+
+
+        .modal-content {
+            background: #343a40;
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            max-width: 400px;
+        }
     </style>
 </head>
 
@@ -134,13 +144,13 @@
         </div>
 
         <div class="d-flex mb-4">
-            <button (click)="iniciar()" class="btn btn-lg btn-outline-light me-2" [disabled]="maquinaCorriendo"
+            <button (click)="iniciar()" class="btn btn-lg btn-outline-light me-2" [disabled]="maquinaCorriendo || isModalOpen"
                 [ngClass]="{'disabled': maquinaCorriendo}">
                 <span *ngIf="maquinaCorriendo">Ejecutando...</span>
                 <span *ngIf="!maquinaCorriendo">Iniciar</span>
             </button>
 
-            <button (click)="paso()" class="btn btn-lg btn-outline-light me-2" [disabled]="maquinaCorriendo">
+            <button (click)="paso()" class="btn btn-lg btn-outline-light me-2" [disabled]="maquinaCorriendo || isModalOpen">
                 Paso
             </button>
 
@@ -153,7 +163,10 @@
                 [disabled]="maquinaCorriendo">
                 Borrar cinta
             </button>
+            <button class="btn btn-lg btn-outline-light" (click)="openModal()">Configurar Cinta</button>
+
         </div>
+
 
         <div class="cinta-container mb-4 w-100">
             <div class="d-flex justify-content-start position-relative">
@@ -165,6 +178,41 @@
         </div>
 
         <p class="fs-4">Cabezal en: <span>{{ palabraActual }}</span></p>
+
+        <div *ngIf="isModalOpen" class="modal-overlay" (click)="closeModal()">
+            <div class="modal-content" (click)="$event.stopPropagation()">
+                <h2 class="text-center">Configurar Cinta</h2>
+                <p class="text-center mb-4">Aquí puedes configurar la cinta según tus necesidades.</p>
+        
+                <!-- Botones para mover el cabezal -->
+                <div class="d-flex justify-content-center mb-3">
+                    <button class="btn btn-outline-light btn-lg" (click)="moverCabezalIzquierda()">⬅️</button>
+                    <button class="btn btn-outline-light btn-lg mx-2" (click)="moverCabezalDerecha()">➡️</button>
+                </div>
+        
+                <!-- Campo de texto para modificar el contenido de la celda -->
+                <div class="form-group mb-4 text-center">
+                    <label for="nuevoValor" class="form-label">Nuevo valor para la celda:</label>
+                    <input type="text" id="nuevoValor" [(ngModel)]="nuevoValor" class="form-control" placeholder="Escribe el valor aquí" />
+                </div>
+        
+                <!-- Botones para agregar o eliminar celdas -->
+                <div class="d-flex justify-content-center mb-4">
+                    <button class="btn btn-outline-danger btn-lg me-3" (click)="eliminarCelda()">Eliminar celda</button>
+                    <button class="btn btn-outline-light btn-lg" (click)="addCelda()">Agregar celda</button>
+                </div>
+        
+                <!-- Botón para actualizar la celda con el nuevo valor -->
+                <div class="d-flex justify-content-center mb-4">
+                    <button class="btn btn-outline-success btn-lg" (click)="actualizarCelda()">Modificar</button>
+                </div>
+        
+                <!-- Botón para cerrar el modal -->
+                <div class="text-center">
+                    <button class="btn btn-outline-danger btn-lg" (click)="closeModal()">Cerrar Configuración</button>
+                </div>
+            </div>
+        </div>
     </div>
 </body>
 
