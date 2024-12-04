@@ -1,7 +1,7 @@
-### GUÍA DE INSTALACIÓN - MÁQUINA DE TURING
+## GUÍA DE INSTALACIÓN - MÁQUINA DE TURING
 
-## FACUNDO ESPAÑOL, ERIC ANDERSON Y LUCAS SAN MARTIN
-## UNPSJB
+### FACUNDO ESPAÑOL, ERIC ANDERSON Y LUCAS SAN MARTIN
+### UNPSJB
 
 # Guia de instalación
 # Requisitos previos 
@@ -46,9 +46,9 @@ Este comando puede variar según la distro de linux utilizada.
 
 
 
-### MANUAL DE USUARIO - MÁQUINA DE TURING
+## MANUAL DE USUARIO - MÁQUINA DE TURING
 
-## Introducción al programa
+# Introducción al programa
 Este programa realizado en una arquitectura web está diseñado para ejecutar y trabajar con Máquinas de Turing, permitiendo a los usuarios cargar máquinas en formato CSV para posteriormente ejecutarlas. Además, permite personalizar la cinta inicial, ajustar la velocidad de ejecución (incluso una vez iniciada), ejecutar paso a paso, y detener el proceso en cualquier momento. 
 	El programa ya viene con tres máquinas de turing precargadas: Fibonacci, antecesor y sucesor binario.
 # Método de uso
