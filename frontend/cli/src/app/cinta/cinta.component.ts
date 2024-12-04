@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, Injectable, TemplateRef, ViewChild } from '@angular/core';
-import { CommonModule, NgIf } from '@angular/common';
+import { CommonModule, Location, NgIf } from '@angular/common';
 import { Constante } from '../constantes';
 import { FormsModule } from '@angular/forms';
 import { CintaService } from './cinta.service';
@@ -58,7 +58,8 @@ export class CintaComponent {
   @ViewChild('modalInvitarAmigos') modalInvitarAmigos!: TemplateRef<any>;
 
   constructor(private cdr: ChangeDetectorRef, private dialog: MatDialog,
-    private cintaService: CintaService, private transicionService: TransicionesService) { }
+    private cintaService: CintaService, private transicionService: TransicionesService,
+    private location: Location) { }
 
   async ngOnInit() {
     try {
@@ -364,7 +365,7 @@ export class CintaComponent {
     }
     this.nuevoValor = this.cinta[this.posicionCabezal];
     this.palabraActual = this.cinta[this.posicionCabezal];
-    //this.verificarBordes();
+    this.verificarBordes();
 
   }
 
@@ -379,6 +380,10 @@ export class CintaComponent {
     this.nuevoValor = '';
     this.palabraActual = this.cinta[this.posicionCabezal];
     this.verificarBordes();
+  }
+
+  goBack(): void{
+    this.location.back();
   }
 
 }
