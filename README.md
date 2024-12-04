@@ -9,7 +9,7 @@
 El proyecto requiere que el sistema tenga instalado docker y docker compose previamente. Ver apéndice para configurarlo correctamente.
 
 ## 1. Descarga e inicio del proyecto
-Descarga el proyecto y abre una consola en tu sistema operativo. Navega hasta la carpeta donde se encuentra el proyecto (la carpeta se llama turing, dentro de la misma hay otra que también se llama turing, en esta última se debe ingresar) y ejecuta el comando chmod +x lpl y luego ./lpl up. Este comando descarga todo lo necesario para Docker y la arquitectura web del proyecto. El proceso puede tardar algunos minutos.
+Crea una carpeta llamada turing en tu computadora, clona el proyecto de github (https://github.com/ERICNOB1974/turing) dentro. Luego, abre una consola en tu sistema operativo. Navega hasta la carpeta donde se encuentra el proyecto (dentro de la carpeta donde se clonó, debe haber una carpeta que se llama turing, se debe ingresar ahi) y ejecuta el comando chmod +x lpl y luego ./lpl up. Este comando descarga todo lo necesario para Docker y la arquitectura web del proyecto. El proceso puede tardar algunos minutos.
 
 ## 2. Verificar el estado de los contenedores
 Una vez finalizado el paso anterior, verifica que los contenedores del backend y frontend se hayan iniciado correctamente ejecutando los comandos ./lpl log frontend para el frontend y ./lpl log backend para el backend. Si los logs del frontend muestran un error relacionado con Angular, sigue el siguiente procedimiento.
